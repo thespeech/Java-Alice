@@ -25,7 +25,7 @@ public class Body {
 		this.hair = hair;
 	}
 
-	public String getHair(String hair) {
+	public String getHair() {
 		return this.hair;
 	}
 
@@ -33,7 +33,7 @@ public class Body {
 		this.eyeType = eyeType;
 	}
 
-	public String getEyeType(String eyeType) {
+	public String getEyeType() {
 		return this.eyeType;
 	}
 
@@ -41,7 +41,7 @@ public class Body {
 		this.eyeColor = eyeColor;
 	}
 
-	public String getEyeColor(String eyeColor) {
+	public String getEyeColor() {
 		return this.eyeColor;
 	}
 
@@ -57,7 +57,7 @@ public class Body {
 		this.ass = ass;
 	}
 
-	public String getAss(String ass) {
+	public String getAss() {
 		return this.ass;
 	}
 

@@ -17,4 +17,23 @@ class Person {
 	{
 		return thisBody;
 	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	public int getId(){
+		return this.id;
+	}
+
+	//Debugging routine for now.
+	public void printBody()
+	{
+		System.out.println("Hair: "+thisBody.getHair());
+		System.out.println("Eye type: "+thisBody.getEyeType());
+		System.out.println("Eye color: "+thisBody.getEyeColor());
+		System.out.println("Breasts: "+thisBody.getBreasts());
+		System.out.println("Ass: "+thisBody.getAss());
+		System.out.println("Body type: "+thisBody.getBodyType());
+	}
+	
 }

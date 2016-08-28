@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -17,26 +18,28 @@ public class PeopleGenerator {
 	List<String> breastsBuffer;
 	List<String> assBuffer;
 	List<String> bodyTypeBuffer;
-
+	
+	Random rand ;
 	public PeopleGenerator() {
 		loadDataFromFiles();
+		rand = new Random(System.currentTimeMillis());
 	}
 
 	private void loadDataFromFiles() {
 		Path currentPath;
 		Charset charset = StandardCharsets.UTF_8;
 		try {
-			currentPath = Paths.get("/data/", "hair.txt");
+			currentPath = Paths.get("./data/", "hair.txt");
 			hairBuffer = Files.readAllLines(currentPath, charset);
-			currentPath = Paths.get("/data/", "eyes.txt");
+			currentPath = Paths.get("./data/", "eyes.txt");
 			eyeTypeBuffer = Files.readAllLines(currentPath, charset);
-			currentPath = Paths.get("/data/", "eyecolor.txt");
+			currentPath = Paths.get("./data/", "eyecolor.txt");
 			eyeColorBuffer = Files.readAllLines(currentPath, charset);
-			currentPath = Paths.get("/data/", "breasts.txt");
+			currentPath = Paths.get("./data/", "breasts.txt");
 			breastsBuffer = Files.readAllLines(currentPath, charset);
-			currentPath = Paths.get("/data/", "ass.txt");
+			currentPath = Paths.get("./data/", "ass.txt");
 			assBuffer = Files.readAllLines(currentPath, charset);
-			currentPath = Paths.get("/data/", "body.txt");
+			currentPath = Paths.get("./data/", "body.txt");
 			bodyTypeBuffer = Files.readAllLines(currentPath, charset);
 		} catch (IOException e) {
 			System.out.println(e);
@@ -45,24 +48,32 @@ public class PeopleGenerator {
 
 	// This function assumes data already loaded into lists
 	private Body generateRandomBody() {
-		Random rand = new Random(System.currentTimeMillis());
 		String rHair = hairBuffer.get(rand.nextInt(hairBuffer.size()));
 		String rEyeType = eyeTypeBuffer.get(rand.nextInt(eyeTypeBuffer.size()));
 		String rEyeColor = eyeColorBuffer.get(rand.nextInt(eyeColorBuffer
 				.size()));
 		String rBreasts = breastsBuffer.get(rand.nextInt(breastsBuffer.size()));
 		String rAss = assBuffer.get(rand.nextInt(assBuffer.size()));
-		String rBodyType = bodyTypeBuffer.get(rand.nextInt(bodyTypeBuffer.size()));
-		Body newBody = new Body(rHair, rEyeType, rEyeColor, rBreasts, rAss, rBodyType);
+		String rBodyType = bodyTypeBuffer.get(rand.nextInt(bodyTypeBuffer
+				.size()));
+		Body newBody = new Body(rHair, rEyeType, rEyeColor, rBreasts, rAss,
+				rBodyType);
 		return newBody;
 	}
-	
-	private Person generatePerson()
-	{
+
+	private Person generatePerson(int id) {
 		Person newPerson = new Person();
+		newPerson.setId(id);
 		newPerson.setBody(generateRandomBody());
-		//generateRandomBrain(newPerson); //Still to be implemented.
 		return newPerson;
 	}
-	
+
+	public List<Person> createCastList(int numOfPersons) {
+		List<Person> castList = new ArrayList<Person>();
+		for(int i=0;i<numOfPersons;i++){
+			castList.add(generatePerson(i));
+		}
+		return castList;
+	}
+
 }
