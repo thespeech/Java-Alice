@@ -10,4 +10,5 @@ public class Brain {
 	private List<Trait> traits;
 	private List<Belief> beliefs;
 	
+	
 }
