@@ -40,6 +40,7 @@ public class Relationship {
 	private int sexualship; // Latest sexual score, calculated each turn.
 
 	// Resource pools, which drain when certain events happen.
+	// Resource pools can go above the cap, but they will drain over time back to the cap.
 	private int interactionDesire; // Current patience/desire this person has
 									// for interaction with this relation
 	private int interactionDesireCap; // The maximum desire/patience this person

@@ -16,7 +16,8 @@ public class Memory {
 		memoryMap = new HashMap<String, String>(); // Flexible based on event
 													// which produced it.
 													// Responsibility of
-													// interpreting it is event
+													// interpreting it belongs
+													// to event
 													// which evaluates it.
 	}
 }
