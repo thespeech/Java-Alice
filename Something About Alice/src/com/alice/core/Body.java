@@ -1,5 +1,7 @@
 package com.alice.core;
 
+
+//Mostly boilerplate code for storing information in this object
 public class Body {
 	// Physical characteristics
 	private String hair;

@@ -1,0 +1,2 @@
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>Added memories to relationships, added explicit variables for storing&\#x0A;forgettable value-changes to friend/rom/sex stuff, and holder variables&\#x0A;for &apos;real&apos; score. </message>\r\n<message>Final(for now) relationship properties.</message>\r\n</messages>
+eclipse.preferences.version=1

@@ -26,6 +26,7 @@ public class PeopleGenerator {
 	}
 
 	private void loadDataFromFiles() {
+		//Read everything into lists of strings in memory.
 		Path currentPath;
 		Charset charset = StandardCharsets.UTF_8;
 		try {
@@ -75,5 +76,5 @@ public class PeopleGenerator {
 		}
 		return castList;
 	}
-
+	
 }
