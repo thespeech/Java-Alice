@@ -1,8 +1,0 @@
-pert
-round
-firm
-ample
-small
-tight
-shapely
-soft

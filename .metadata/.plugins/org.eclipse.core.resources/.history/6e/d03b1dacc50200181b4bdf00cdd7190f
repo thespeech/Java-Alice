@@ -1,8 +1,0 @@
-package com.alice.core;
-
-public class Relationship {
-
-	Person relation;
-	int physicalAttraction; //This is a static number, defined by the relation's physical traits and the person's preferences
-	
-}
