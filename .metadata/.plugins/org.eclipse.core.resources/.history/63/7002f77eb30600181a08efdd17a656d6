@@ -1,0 +1,17 @@
+package com.alice.core;
+
+public class Main {
+
+	public static void main(String[] args) {
+		//Entry point.
+		PeopleManager mainPeopleManager = new PeopleManager();
+		Scheduler mainScheduler = new Scheduler();
+		mainPeopleManager.createPeople(150, 30); 
+		mainPeopleManager.printClassgroups();
+		mainScheduler.generateClassSchedules(mainPeopleManager.returnClassNumber());
+		mainScheduler.printAllSchedules();
+		for(;;) {
+			
+		}
+	}
+}

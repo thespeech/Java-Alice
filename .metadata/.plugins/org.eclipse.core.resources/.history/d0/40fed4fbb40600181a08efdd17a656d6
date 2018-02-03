@@ -1,0 +1,22 @@
+package com.alice.core;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		//Entry point.
+		PeopleManager mainPeopleManager = new PeopleManager();
+		Scheduler mainScheduler = new Scheduler();
+		mainPeopleManager.createPeople(150, 30); 
+		mainPeopleManager.printClassgroups();
+		mainScheduler.generateClassSchedules(mainPeopleManager.returnClassNumber());
+		mainScheduler.printAllSchedules();
+		
+		Scanner reader = new Scanner(System.in);
+		String input="";
+		for(;;) {
+		input = reader.nextLine();	
+		mainScheduler.stepSchedule();
+		}
+	}
+}

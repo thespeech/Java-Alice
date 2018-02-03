@@ -1,0 +1,35 @@
+package com.alice.core;
+import java.util.ArrayList;
+
+import com.google.gson.*;
+
+public class RelationshipEffectManager {
+	
+	//This object manages all relationship effects - likely to be a very long file.
+	Gson gson;
+	RelationshipEffectManager() {
+		gson = new GsonBuilder().setPrettyPrinting().create();
+	}
+	
+	void createTemplateJson() {
+		RelationshipEffectTemplate sampleTemplate = new RelationshipEffectTemplate();
+		sampleTemplate.id = 0;
+		sampleTemplate.name = "Enter name here";
+		sampleTemplate.description = "Enter description here";
+		sampleTemplate.secret = false;
+		sampleTemplate.minDuration = -1;
+		sampleTemplate.maxDuration = -1;
+		sampleTemplate.minIntimacyEffect = 1;
+		sampleTemplate.maxIntimacyEffect = 1;
+		sampleTemplate.minPassionEffect = 1;
+		sampleTemplate.maxPassionEffect = 1;
+		sampleTemplate.minCommitmentEffect = 1;
+		sampleTemplate.maxCommitmentEffect = 1;
+		sampleTemplate.miscKeys = new ArrayList<String>();
+		miscKeys.add("Sample Keyword");
+		
+		System.out.println(jsonString);
+	}
+	
+
+}

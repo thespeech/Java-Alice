@@ -1,0 +1,11 @@
+package com.alice.core;
+
+public class Schedule {
+	
+	int classId;
+	String[] Monday = new String[10];
+	String[] Tuesday = new String[10];
+	String[] Wednesday = new String[10];
+	String[] Thursday = new String[10];
+	String[] Friday = new String[10];
+}

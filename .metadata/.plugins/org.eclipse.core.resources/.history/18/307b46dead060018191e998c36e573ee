@@ -1,0 +1,70 @@
+package com.alice.core;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Scheduler {
+
+	List<Schedule> allSchedules = new ArrayList<Schedule>();
+	
+	Scheduler() {
+	}
+	
+	void generateClassSchedules(int classes) {
+		//Generate for Mon to Fri.
+		//Classes: Math, English, Biology, Physics, Chemistry, History, Literature, Geography, Assorted Powers Practice, Psychic Defence
+		//Implemented as: At Home, Before classes, Classes <varied>, Recess, Classes <varied>, After school, CCA, At home. 
+		//There is a maximum of 2 Psychic defence classes a week, in a block.
+		//There are 2 periods of each class, except for psychic defence and assorted powers practice. There are 4 periods of assorted powers practice, split into two blocks.
+		//There are 4 class periods in a day.
+		System.out.println("Generating class schedules.":w);
+	Random rand = new Random(System.currentTimeMillis());
+	for(int classIndex = 0; classIndex < classes; classIndex++) {
+	List<String> periods = new ArrayList<String>();
+	for(int i=0;i<2;i++) {
+		periods.add("Math");
+		periods.add("English");
+		periods.add("Biology");
+		periods.add("Physics");
+		periods.add("Chemistry");
+		periods.add("History");
+		periods.add("Literature");
+		periods.add("Geography");
+	}
+	periods.add("PsychicDefence");
+
+	for(int i=0;i<3;i++) {
+	periods.add("PowersPractice");
+	}
+	Schedule newSchedule = new Schedule();
+	newSchedule.classId = classIndex;
+	for(int i=0;i<4;i++) {
+		int selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Monday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Tuesday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		newSchedule.Wednesday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		newSchedule.Thursday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		newSchedule.Friday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+	}
+	allSchedules.add(newSchedule);
+	}
+	}
+	
+	void printAllSchedules() {
+		for(Schedule eachSchedule : allSchedules) {
+			System.out.println("ID: " + eachSchedule.classId);
+			System.out.println("Monday: " + eachSchedule.Monday);
+			System.out.println("Tuesday: " + eachSchedule.Tuesday);
+			System.out.println("Wednesday: " + eachSchedule.Wednesday);
+			System.out.println("Thursday: " + eachSchedule.Thursday);
+			System.out.println("Friday: " + eachSchedule.Friday);
+		}
+	}
+}

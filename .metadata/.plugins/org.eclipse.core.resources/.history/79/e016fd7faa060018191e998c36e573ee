@@ -1,0 +1,17 @@
+package com.alice.core;
+
+public class Scheduler {
+
+	Scheduler() {
+		
+	}
+	
+	void generateClassSchedules(int classes) {
+		//Generate for Mon to Fri.
+		//Classes: Math, English, Biology, Physics, Chemistry, History, Literature, Geography, Assorted Powers Practice, Psychic Defence
+		//Implemented as: At Home, Before classes, Classes <varied>, Recess, Classes <varied>, After school, CCA, At home. 
+		//There is a maximum of 2 Psychic defence classes a week, in a block.
+		//There are 3 periods of each class, except for psychic defence and assorted powers practice. There are 4 periods of assorted powers practice, split into two blocks.
+		
+	}
+}

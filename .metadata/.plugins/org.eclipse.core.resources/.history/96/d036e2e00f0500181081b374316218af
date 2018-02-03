@@ -1,0 +1,12 @@
+package com.alice.core;
+
+public class BodyPreferences {
+	
+	public:
+		
+	String hairPref;
+	String eyeColorPref;
+	String breastPref;
+	String assPref;
+	String bodyTypePref;
+}

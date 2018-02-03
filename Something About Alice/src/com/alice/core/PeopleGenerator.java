@@ -66,7 +66,16 @@ public class PeopleGenerator {
 		Person newPerson = new Person();
 		newPerson.setId(id);
 		newPerson.setBody(generateRandomBody());
+		generateBodyPreferences(newPerson);
 		return newPerson;
+	}
+	
+	private void generateBodyPreferences(Person thisPerson) {
+	thisPerson.bodyPrefs.assPref = assBuffer.get(rand.nextInt(assBuffer.size()));	
+	thisPerson.bodyPrefs.breastPref = breastsBuffer.get(rand.nextInt(breastsBuffer.size()));	
+	thisPerson.bodyPrefs.hairPref = hairBuffer.get(rand.nextInt(hairBuffer.size()));	
+	thisPerson.bodyPrefs.eyeColorPref = eyeColorBuffer.get(rand.nextInt(eyeColorBuffer.size()));	
+	thisPerson.bodyPrefs.bodyTypePref = bodyTypeBuffer.get(rand.nextInt(bodyTypeBuffer.size()));	
 	}
 
 	public List<Person> createCastList(int numOfPersons) {

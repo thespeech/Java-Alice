@@ -1,0 +1,346 @@
+package com.alice.core;
+import java.util.*;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class PeopleManager {
+	PeopleGenerator mainGenerator;
+	List<Person> castList;
+	List<Classgroup> classList;
+	List<Clique> cliqueList;
+	int cliqueId = 0;
+	Random rand;
+	
+	public PeopleManager() {
+		classList = new ArrayList<Classgroup>();
+		cliqueList = new ArrayList<Clique>();
+		rand = new Random(System.currentTimeMillis());
+	}
+	
+	//Main function for creating people.
+	public void createPeople(int numOfPersons, int classSize) {
+		System.out.println("Creating people.");
+		mainGenerator = new PeopleGenerator();
+		castList = mainGenerator.createCastList(numOfPersons);
+		createClasses(numOfPersons, classSize);
+		createCliquesForClass();
+		createIntraClassCrossCliques();
+		printCliquesForClass();
+		createPastFriendCliques(20);
+		printPastFriendCliques();
+		cliqueList = gatherAllCliques(castList);
+		generateSharedCliqueInterests(castList, cliqueList);
+		printCliqueInfo(cliqueList);
+		createRelationships(castList);
+		LayCastListBare(castList);
+	}
+	
+	public void createClasses(int numOfPersons, int classSize) {
+		System.out.println("Creating classes with class size " + classSize + ".");
+		int currentClass = 0;
+		Classgroup newGroup = new Classgroup();
+		classList.add(newGroup);
+		newGroup.id = currentClass;
+		int currentClassSize = 0;
+		for(Person eachPerson : castList) {
+			if(currentClassSize == classSize) {
+				//Preemptive breaking of loop before adding, if class is full
+				currentClassSize = 0;
+				currentClass++;
+				newGroup = new Classgroup();
+				newGroup.id = currentClass;
+				classList.add(newGroup);
+		}
+		currentClassSize++;
+		eachPerson.classgroup = newGroup;
+		newGroup.members.add(eachPerson);
+		}
+	}
+	
+	public void createRelationships(List<Person> castList) {
+		for(Person eachPerson : castList) {
+		List<Person> allRelated = new ArrayList<Person>();
+		//First add all members who are not this person in their clique 
+		for(Clique eachClique : eachPerson.belongedCliques) {
+			for(Person eachPersonInClique : eachClique.cliqueMembers) {
+				if(!allRelated.contains(eachPersonInClique) && !eachPersonInClique.equals(eachPerson)) {
+				allRelated.add(eachPersonInClique);	
+				}
+			}
+		}
+		//Generate base relationships for them.
+		for(Person newRelation : allRelated) {
+			Boolean alreadyExists = false;
+			Relationship alreadyRelatedRelationship = new Relationship();
+			//First search relationships to see if this relation already exists.
+			for(Relationship eachRelationship : newRelation.relationships) {
+				System.out.println("Checking relationship " + eachRelationship.relation.getId() + "'s relationships to see if this person already exists on that guy's side.");
+				if(eachRelationship.relation.equals(eachPerson)) {
+				alreadyExists = true;	
+				alreadyRelatedRelationship = eachRelationship;
+				}
+			}
+		Relationship newRelationship = new Relationship();
+		newRelationship.relation = newRelation;
+		if(!alreadyExists) { //If the other person does not already have a relationship with this person
+			System.out.println("ID " + eachPerson.getId() + " does not have a pre-existing relationship with " + newRelation.getId());
+		newRelationship.baseCloseness = rand.nextInt(31);
+		newRelationship.baseCommitment = rand.nextInt(31);
+		newRelationship.basePassion = rand.nextInt(31); 
+		}
+		else {
+			//If he does, then use that relationship to initialize the rleationship on this end instead.
+			System.out.println("Generating relationship based on existing one.");
+			newRelationship.baseCloseness = alreadyRelatedRelationship.baseCloseness-5+rand.nextInt(11); 
+			newRelationship.baseCommitment = alreadyRelatedRelationship.baseCommitment-5+rand.nextInt(11);
+			newRelationship.basePassion = alreadyRelatedRelationship.basePassion-5+rand.nextInt(11);
+		}
+		eachPerson.relationships.add(newRelationship);
+		}
+		}
+	}
+	
+	
+	public void generateSharedCliqueInterests(List<Person> castList, List<Clique> cliqueList) {
+		//Iterate through clique list - assign secondary bonding factor to them - interests.
+		//While cliques normally form due to being around each other, what keeps a clique together are shared interests.
+		Path currentPath;
+		List<String> interestBuffer = new ArrayList<String>();
+		Charset charset = StandardCharsets.UTF_8;
+		try {
+			currentPath = Paths.get("./data/", "interests.txt");
+			interestBuffer = Files.readAllLines(currentPath, charset);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		for(Clique thisClique : cliqueList) {
+		int cliqueInterestNum = 1+rand.nextInt(2);	
+		while(cliqueInterestNum > 0) {
+			String consideredInterest = interestBuffer.get(rand.nextInt(interestBuffer.size()));
+			if(!thisClique.sharedInterests.contains(consideredInterest)) {
+				thisClique.sharedInterests.add(consideredInterest);
+				cliqueInterestNum--;
+			}
+		}
+		}
+		assignCliqueInterestsToMembers(cliqueList);
+	}
+	
+	public void assignCliqueInterestsToMembers(List<Clique> cliqueList) {
+		for(Clique thisClique : cliqueList) {
+			for(Person thisMember : thisClique.cliqueMembers) {
+				for(String cliqueInterest : thisClique.sharedInterests) {
+					if(!thisMember.interests.contains(cliqueInterest)) {
+						thisMember.interests.add(cliqueInterest);
+					}
+				}
+			}
+		}
+	}
+	
+	public void printCliqueInfo(List<Clique> cliqueList) {
+		for(Clique thisClique : cliqueList) {
+			System.out.println("Clique: " + thisClique.cliqueId);
+			System.out.println("Type: " + thisClique.definingCharacteristic);
+			for(String interest : thisClique.sharedInterests) {
+				System.out.println("Interest: " + interest);
+			}
+		}
+	}
+		
+	
+	List<Clique> gatherAllCliques(List<Person> castList) {
+		List<Clique> allCliquesInGame = new ArrayList<Clique>();
+	for(Person eachPerson : castList) {
+	for(Clique eachClique : eachPerson.belongedCliques) {
+		if(!allCliquesInGame.contains(eachClique)) {
+			allCliquesInGame.add(eachClique);
+		}
+	}
+	}
+	return allCliquesInGame;
+	}
+	
+	public void createCliquesForClass() {
+		//Randomized cliques.
+		for(Classgroup classgroup : classList) {
+			int unassignedMembers= classgroup.members.size();
+			int classSize = classgroup.members.size();
+			while(unassignedMembers > 0) {	//Keep assigning members to cliques until it hits zero
+				int cliqueMembers = 2+rand.nextInt(5); //2 to 6
+				if(unassignedMembers < cliqueMembers) {
+					cliqueMembers = unassignedMembers;
+				}
+				//Possible to have only 1 person in a clique.
+				Clique newClique = new Clique();
+				newClique.definingCharacteristic = "class";
+				newClique.cliqueId = cliqueId;
+				for(int i = 0; i<cliqueMembers; i++) {
+					int indexOfNewMember = classSize-unassignedMembers+i;
+					newClique.cliqueMembers.add(classgroup.members.get(indexOfNewMember));
+					classgroup.members.get(indexOfNewMember).belongedCliques.add(newClique);
+				}
+				unassignedMembers -= cliqueMembers;
+				classgroup.cliqueList.add(newClique);
+				cliqueId++;
+		}
+		}
+	}
+	
+	public void createPastFriendCliques(int number) {
+	//This creates cliques of people spread across the school that were friends before-completely random - up to 3
+		List<Person> peopleAlreadyAdded = new ArrayList<Person>();
+		for(int i = 0; i < number; i++) {
+			int pastFriendNumber = 2+rand.nextInt(2);
+			Clique newClique = new Clique();
+			newClique.cliqueId = cliqueId;
+			newClique.definingCharacteristic = "pastFriends";
+			cliqueId++;
+			for(int j = 0; j < pastFriendNumber; j++) {
+			Person friend = castList.get(rand.nextInt(castList.size()));
+			while(peopleAlreadyAdded.contains(friend)) {
+			//Keep looking for someone not in the list.	
+			friend = castList.get(rand.nextInt(castList.size()));	
+			}
+			newClique.cliqueMembers.add(friend);
+			friend.belongedCliques.add(newClique);
+			if(j != 0) {
+				//Leave the possibility for one out of every clique to be added to another pastFriendClique
+				peopleAlreadyAdded.add(friend);
+			}
+			}
+		}
+	}
+	
+	
+	public void createIntraClassCrossCliques() {
+	//Create 'bridges' between the class cliques, so the class isn't completely segregated.
+		for(Classgroup classgroup : classList) {
+		List<Clique> allIndependentClassCliques = new ArrayList<Clique>(classgroup.cliqueList.size());
+		allIndependentClassCliques.addAll(classgroup.cliqueList);
+		//Only up to 3 cliques in class can have shared members per clique
+		//Max bridging cliques = class cliques/2
+		int maxCliques = allIndependentClassCliques.size()/2;
+		//Only form cross-cliques if there are enough cliques.
+		if(classgroup.cliqueList.size() > 3) {
+			for(int i = 0; i < maxCliques; i++) {
+				//Keep creating the new cross-cliques until max number.
+				Clique newClique = new Clique();
+				newClique.cliqueId = cliqueId;
+				System.out.println("New cross clique: " + newClique.cliqueId);
+				cliqueId++;
+				classgroup.cliqueList.add(newClique);
+			int cliquesIncludedNum = 2+rand.nextInt(2); //2 to 3 cliques included per new clique.
+			System.out.println("Number of cliques included in this clique: " + cliquesIncludedNum);
+			List<Clique> alreadyIncludedCliques = new ArrayList<Clique>();
+			for(int j = 0; j < cliquesIncludedNum; j++) {
+				//Select per included clique.
+				Clique newIncludedClique = allIndependentClassCliques.get(rand.nextInt(allIndependentClassCliques.size())); //Prime the clique
+				while(alreadyIncludedCliques.contains(newIncludedClique)) {
+				newIncludedClique = allIndependentClassCliques.get(rand.nextInt(allIndependentClassCliques.size())); //Make sure the chosen clique is not already in the union
+				}
+				alreadyIncludedCliques.add(newIncludedClique);
+				System.out.println("Number of members in this clique: " + newIncludedClique.cliqueMembers.size());
+				int cliqueBound = newIncludedClique.cliqueMembers.size()/2;
+				int membersOfIncludedCliqueNum = 0;
+				if(cliqueBound!=0) {
+				membersOfIncludedCliqueNum = 1+rand.nextInt(cliqueBound);
+				}
+				else {
+				membersOfIncludedCliqueNum = 1;	
+				}
+				List<Person> alreadyIncludedPeople = new ArrayList<Person>();
+				System.out.println("Number of members to be selected from clique " + newIncludedClique.cliqueId + ": "+ membersOfIncludedCliqueNum);
+				for(int k = 0; k < membersOfIncludedCliqueNum; k++) {
+				//Select per person in included clique.
+				Person newIncludedPerson = newIncludedClique.cliqueMembers.get(rand.nextInt(newIncludedClique.cliqueMembers.size()));
+				while(alreadyIncludedPeople.contains(newIncludedPerson)) {
+				newIncludedPerson= newIncludedClique.cliqueMembers.get(rand.nextInt(newIncludedClique.cliqueMembers.size()));
+				}
+				alreadyIncludedPeople.add(newIncludedPerson);
+				newClique.cliqueMembers.add(newIncludedPerson);
+				newIncludedPerson.belongedCliques.add(newClique);				
+				}
+			}
+		}
+		}
+		}
+	}
+	
+	
+	public void printPastFriendCliques() {
+		List<Clique> friendClique= new ArrayList<Clique>();
+		for(Person consideredPerson : castList) {
+		for(Clique consideredClique : consideredPerson.belongedCliques) {
+			if(consideredClique.definingCharacteristic == "pastFriends") {
+				if(!friendClique.contains(consideredClique)) {
+					friendClique.add(consideredClique);
+				}
+			}
+		}
+		}
+		System.out.println("Friend cliques and their members: ");
+		for(Clique thisFriendClique : friendClique) {
+			System.out.println("ID of clique: " + thisFriendClique.cliqueId);
+			for(Person thisFriend : thisFriendClique.cliqueMembers) {
+				System.out.println("Member: " + thisFriend.getId());
+			}
+		}
+	}
+	
+	public void printClassgroups() {
+		for(Classgroup classgroup : classList) {
+		System.out.println("Class id: " + classgroup.id);	
+		for(Person member : classgroup.members) {
+			System.out.println("Member id: " + member.getId());
+		}
+		}
+	}
+	
+	public void printCliquesForClass() {
+		for(Classgroup classgroup : classList) {
+			for(Clique clique : classgroup.cliqueList) {
+				System.out.println("Clique ID: " + clique.cliqueId);
+				System.out.println("Number of persons in this clique: " + clique.cliqueMembers.size());
+				for(Person personInClique : clique.cliqueMembers) {
+					System.out.println("Person:" + personInClique.getId());
+					for(Clique belongedClique : personInClique.belongedCliques) {
+						System.out.println("Belonging to clique: " + belongedClique.cliqueId);
+					}
+				}
+			}
+		}
+	}
+	
+	public void printRelationshipsForPerson(Person thisPerson) {
+		for(Relationship thisRelation : thisPerson.relationships) {
+			System.out.println("Relation ID: " + thisRelation.relation.getId());
+			System.out.println("Base closeness: " + thisRelation.baseCloseness);
+			System.out.println("Base passion: " + thisRelation.basePassion);
+			System.out.println("Base commitment: " + thisRelation.baseCommitment);
+		}
+	}
+	
+	public void LayCastListBare(List<Person> castList)
+	{
+		for(Person eachPerson : castList)
+		{
+			System.out.println("ID: " + eachPerson.getId());
+			System.out.println("Class ID: " + eachPerson.classgroup.id);
+			System.out.println("Body");
+			System.out.println("----");
+			eachPerson.printBody();
+			System.out.println("----");
+			System.out.println("Interests");
+			eachPerson.printInterests();
+			System.out.println("----");
+			System.out.println("Relationships");
+			printRelationshipsForPerson(eachPerson);
+
+		}
+	}
+}

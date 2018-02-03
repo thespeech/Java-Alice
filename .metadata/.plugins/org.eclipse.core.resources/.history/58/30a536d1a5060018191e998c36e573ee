@@ -1,0 +1,12 @@
+package com.alice.core;
+
+public class Scheduler {
+
+	Scheduler() {
+		
+	}
+	
+	void generateClassSchedules(int classes) {
+		
+	}
+}

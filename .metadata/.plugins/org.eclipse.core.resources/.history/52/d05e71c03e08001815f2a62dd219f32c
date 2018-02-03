@@ -1,0 +1,24 @@
+package com.alice.core;
+import com.google.gson.*;
+
+public class RelationshipEffectManager {
+	
+	//This object manages all relationship effects - likely to be a very long file.
+	Gson gson;
+	RelationshipEffectManager() {
+		gson = new GsonBuilder().setPrettyPrinting().create();
+	}
+	
+	void createTemplateJson() {
+		RelationshipEffect effect = new RelationshipEffect();
+		effect.duration = 5;
+		effect.intimacyEffect = 3;
+		effect.commitmentEffect = 41;
+		effect.passionEffect = 24;
+		
+		String jsonString = gson.toJson(effect);
+		System.out.println(jsonString);
+	}
+	
+
+}

@@ -1,0 +1,11 @@
+package com.alice.core;
+
+public class RelationshipEffect {
+	int id;
+	String name;
+	int duration;
+	int intimacyEffect;
+	int passionEffect;
+	int commitmentEffect;
+
+}

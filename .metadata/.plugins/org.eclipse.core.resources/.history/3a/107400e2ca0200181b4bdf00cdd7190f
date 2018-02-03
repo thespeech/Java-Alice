@@ -1,0 +1,21 @@
+package com.alice.core;
+
+import java.util.Queue;
+
+public class Relationship {
+
+	Person relation;
+	int physicalAttraction; //This is a static number, defined by the relation's physical traits and the person's preferences
+	Queue pastPersonalityTraitsExhibited; //Queue of last 10 traits exhibited in interactions. Only traits the person likes/hates are considered.
+	int personalityAttraction; // Based off the queue; an average of the traits that matter.
+	//Sternberg scale for relationships - all from 0 to 100
+	//Interests and opinions affect intimacy.
+	//Personality and physical attraction affect passion only.
+	//Commitment is affected by personality attraction.
+	//Zero commitment does not mean that the person feels no loyalty to the relation - it is implicit in the other two traits.
+	//Commitment amplifies passion/intimacy and can stand on its own.
+	int intimacy; //This refers to the level of bonding - applies for friendship, knowledge sharing, etc.
+	int passion; //This refers to attraction to the person's personality, mannerisms, and physical features - applies for sex, irrational siding on issues, etc.
+	int commitment; //Implies the level of staying in the relationship simply because of other factors. For example, a member of a club may feel deep commitment towards their leader despite no other factors.	
+
+}

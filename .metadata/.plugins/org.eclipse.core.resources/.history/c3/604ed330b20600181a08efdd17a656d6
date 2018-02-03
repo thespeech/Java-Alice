@@ -1,0 +1,126 @@
+package com.alice.core;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+public class Scheduler {
+
+	List<Schedule> allSchedules = new ArrayList<Schedule>();
+	int dayOfYear=1;
+	int dayOfWeek=1;
+	int period=1;
+	
+	Scheduler() {
+	}
+	
+	void generateClassSchedules(int classes) {
+		//Generate for Mon to Fri.
+		//Classes: Math, English, Biology, Physics, Chemistry, History, Literature, Geography, Assorted Powers Practice, Psychic Defence
+		//Implemented as: At Home, Before classes, Classes <varied>, Recess, Classes <varied>, After school, CCA, At home. 
+		//There is a maximum of 2 Psychic defence classes a week, in a block.
+		//There are 2 periods of each class, except for psychic defence and assorted powers practice. There are 4 periods of assorted powers practice, split into two blocks.
+		//There are 4 class periods in a day.
+		System.out.println("Generating class schedules.");
+	Random rand = new Random(System.currentTimeMillis());
+	for(int classIndex = 0; classIndex < classes; classIndex++) {
+	List<String> periods = new ArrayList<String>();
+	for(int i=0;i<2;i++) {
+		periods.add("Math");
+		periods.add("English");
+		periods.add("Biology");
+		periods.add("Physics");
+		periods.add("Chemistry");
+		periods.add("History");
+		periods.add("Literature");
+		periods.add("Geography");
+	}
+	periods.add("PsychicDefence");
+
+	for(int i=0;i<3;i++) {
+	periods.add("PowersPractice");
+	}
+	Schedule newSchedule = new Schedule();
+	newSchedule.classId = classIndex;
+	int selectedIndex = -1;
+	for(int i=0;i<4;i++) {
+		selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Monday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Tuesday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Wednesday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Thursday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+		selectedIndex = rand.nextInt(periods.size());
+		newSchedule.Friday[i]=periods.get(selectedIndex);
+		periods.remove(selectedIndex);
+	}
+	allSchedules.add(newSchedule);
+	}
+	}
+	
+	void printAllSchedules() {
+		for(Schedule eachSchedule : allSchedules) {
+			System.out.println("ID: " + eachSchedule.classId);
+			System.out.println("Monday: " + Arrays.toString(eachSchedule.Monday));
+			System.out.println("Tuesday: " + Arrays.toString(eachSchedule.Tuesday));
+			System.out.println("Wednesday: " + Arrays.toString(eachSchedule.Wednesday));
+			System.out.println("Thursday: " + Arrays.toString(eachSchedule.Thursday));
+			System.out.println("Friday: " + Arrays.toString(eachSchedule.Friday));
+		}
+	}
+	
+	void stepSchedule() {
+		String currentPeriod="";
+		System.out.println("It is now day " + dayOfYear + " of the year.");
+		
+		for(Schedule eachSchedule: allSchedules) {
+			String[] Day = new String[4];
+			if(dayOfWeek == 1)
+				Day = eachSchedule.Monday;
+			else if(dayOfWeek == 2)
+				Day = eachSchedule.Tuesday;
+			else if(dayOfWeek == 3)
+				Day = eachSchedule.Wednesday;
+			else if(dayOfWeek == 4)
+				Day = eachSchedule.Thursday;
+			else if(dayOfWeek == 5)
+				Day = eachSchedule.Friday;
+			else if(dayOfWeek == 6)
+				Day = eachSchedule.freeDay;
+
+			System.out.println("For class "+eachSchedule.classId+": ");
+			if(period == 1)
+				currentPeriod = "atHome";
+			else if(period == 2)
+				currentPeriod = "beforeClasses";
+			else if(period == 3)
+				currentPeriod = Day[0];
+			else if(period == 4)
+				currentPeriod = Day[1];
+			else if(period == 5)
+				currentPeriod = "recess";
+			else if(period == 6)
+				currentPeriod = Day[2];
+			else if(period == 7)
+				currentPeriod = Day[3];
+			else if(period == 8)
+				currentPeriod = "afterSchool";
+			else if(period == 9)
+				currentPeriod = "CCA";
+			else if(period == 10)
+				currentPeriod = "atHomeNight";
+		}
+		period++;
+		if(period == 11) {
+			dayOfWeek++;
+			dayOfYear++;
+		}
+	}
+}

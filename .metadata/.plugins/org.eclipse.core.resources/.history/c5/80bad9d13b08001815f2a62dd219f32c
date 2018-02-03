@@ -1,0 +1,20 @@
+package com.alice.core;
+import com.google.gson.*;
+
+public class RelationshipEffectManager {
+	
+	//This object manages all relationship effects - likely to be a very long file.
+	RelationshipEffectManager() {
+		Gson gson = new Gson();
+	}
+	
+	void checkGson() {
+		RelationshipEffect effect = new RelationshipEffect();
+		effect.duration = 5;
+		effect.intimacyEffect = 3;
+		effect.commitmentEffect = 41;
+		effect.passionEffect = 24;
+	}
+	
+
+}

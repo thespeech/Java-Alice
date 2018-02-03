@@ -1,0 +1,22 @@
+package com.alice.core;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommonRelationship {
+	
+	//If you strip everything that makes people different away from them, a relationship is symmetrical. This expresses that.
+	
+	List<RelationshipEffect> commonEffects;
+	int commonIntimacy;
+	int commonPassion;
+	int commonCommitment;
+
+	CommonRelationship() {
+		commonEffects = new ArrayList<RelationshipEffect>();
+	}
+	
+	
+	
+
+}

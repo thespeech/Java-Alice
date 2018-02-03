@@ -1,12 +1,25 @@
 package com.alice.core;
 
-class Person {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Person {
 	// NPC class
 	private int id; // Identifies the person.
-	private int classId; //Identifies the class the person belongs to
-	Brain thisBrain;
+	Classgroup classgroup;
 	Body thisBody;
+	BodyPreferences bodyPrefs;
+	String currentPeriodStatus;
+	List<Clique> belongedCliques;
+	List<String> interests;
+	List<Relationship> relationships;
 
+	public Person() {
+		belongedCliques = new ArrayList<Clique>();
+		interests = new ArrayList<String>();
+		relationships = new ArrayList<Relationship>();
+		bodyPrefs = new BodyPreferences();
+	}
 	//Initialize body without clothes if it doesn't exist.
 	public void setBody(Body newBody) {
 		if (null == thisBody) {
@@ -26,12 +39,6 @@ class Person {
 		return this.id;
 	}
 
-	public void setClassId(int classId){
-		this.classId= classId;
-	}
-	public int getClassId(){
-		return this.classId;
-	}
 	//Debugging routine for now.
 	public void printBody()
 	{
@@ -45,7 +52,22 @@ class Person {
 	
 	public void printClass()
 	{
-		System.out.println("Class is: "+ getClassId());
+		System.out.println("Class is: "+ classgroup.id);
+	}
+	
+	public void printInterests()
+	{
+		for(String interest : interests) {
+			System.out.println(interest);
+		}
+	}
+	
+	public void printPreferences()
+	{
+		System.out.println("Hair pref: "+bodyPrefs.hairPref);
+		System.out.println("Eye pref: "+bodyPrefs.eyeColorPref);
+		System.out.println("Breasts pref: "+bodyPrefs.breastPref);
+		System.out.println("Ass pref: "+bodyPrefs.assPref);
 	}
 	
 }

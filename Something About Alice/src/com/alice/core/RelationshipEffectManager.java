@@ -1,0 +1,69 @@
+package com.alice.core;
+
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.google.gson.*;
+
+public class RelationshipEffectManager {
+
+	// This object manages all relationship effects - likely to be a very long file.
+	Gson gson;
+
+	RelationshipEffectManager() {
+		gson = new GsonBuilder().setPrettyPrinting().create();
+	}
+
+	void createTemplateJson(int num) {
+		RelationshipEffectTemplate sampleTemplate = new RelationshipEffectTemplate();
+		sampleTemplate.id = 0;
+		sampleTemplate.name = "Enter name here";
+		sampleTemplate.description = "Enter description here";
+		sampleTemplate.secret = false;
+		sampleTemplate.minDuration = -1;
+		sampleTemplate.maxDuration = -1;
+		sampleTemplate.minIntimacyEffect = 1;
+		sampleTemplate.maxIntimacyEffect = 1;
+		sampleTemplate.minPassionEffect = 1;
+		sampleTemplate.maxPassionEffect = 1;
+		sampleTemplate.minCommitmentEffect = 1;
+		sampleTemplate.maxCommitmentEffect = 1;
+		sampleTemplate.miscKeys = new ArrayList<String>();
+		sampleTemplate.miscKeys.add("Sample Keyword");
+		sampleTemplate.miscKeys.add("Sample Keyword 2");
+
+		List<RelationshipEffectTemplate> sampleList = new ArrayList<RelationshipEffectTemplate>();
+		for (int i = 0; i < num; i++) {
+			sampleList.add(sampleTemplate);
+		}
+
+		try (Writer writer = new FileWriter("SampleRelationshipEffectTemplate.json")) {
+			gson.toJson(sampleList, writer);
+		} catch (Exception e) {
+			System.out.println("Exception in JSON part.");
+		}
+
+	}
+
+	public static String replaceTokens(String text, Map<String, String> replacements) {
+		Pattern pattern = Pattern.compile("\\[(.+?)\\]"); //Variable names must be in brackets, like '[Name1]'
+		Matcher matcher = pattern.matcher(text);
+		StringBuffer buffer = new StringBuffer();
+
+		while (matcher.find()) {
+			String replacement = replacements.get(matcher.group(1));
+			if (replacement != null) {
+				matcher.appendReplacement(buffer, "");
+				buffer.append(replacement);
+			}
+		}
+		matcher.appendTail(buffer);
+		return buffer.toString();
+	}
+
+}

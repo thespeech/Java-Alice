@@ -1,0 +1,71 @@
+package com.alice.core;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Person {
+	// NPC class
+	private int id; // Identifies the person.
+	Classgroup classgroup;
+	Body thisBody;
+	BodyPreferences bodyPrefs;
+	List<Clique> belongedCliques;
+	List<String> interests;
+	List<Relationship> relationships;
+
+	public Person() {
+		belongedCliques = new ArrayList<Clique>();
+		interests = new ArrayList<String>();
+		relationships = new ArrayList<Relationship>();
+	}
+	//Initialize body without clothes if it doesn't exist.
+	public void setBody(Body newBody) {
+		if (null == thisBody) {
+			thisBody = newBody;
+		}
+	}
+	
+	public Body getBody()
+	{
+		return thisBody;
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	public int getId(){
+		return this.id;
+	}
+
+	//Debugging routine for now.
+	public void printBody()
+	{
+		System.out.println("Hair: "+thisBody.getHair());
+		System.out.println("Eye type: "+thisBody.getEyeType());
+		System.out.println("Eye color: "+thisBody.getEyeColor());
+		System.out.println("Breasts: "+thisBody.getBreasts());
+		System.out.println("Ass: "+thisBody.getAss());
+		System.out.println("Body type: "+thisBody.getBodyType());
+	}
+	
+	public void printClass()
+	{
+		System.out.println("Class is: "+ classgroup.id);
+	}
+	
+	public void printInterests()
+	{
+		for(String interest : interests) {
+			System.out.println(interest);
+		}
+	}
+	
+	public void printPreferences()
+	{
+		System.out.println("Hair pref: "+bodyPrefs.hairPref);
+		System.out.println("Eye pref: "+bodyPrefs.eyeColorPref);
+		System.out.println("Breasts pref: "+bodyPrefs.breastPref);
+		System.out.println("Ass pref: "+bodyPrefs.assPref);
+	}
+	
+}

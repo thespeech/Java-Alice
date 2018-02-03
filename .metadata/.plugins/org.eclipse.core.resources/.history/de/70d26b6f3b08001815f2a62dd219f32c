@@ -1,0 +1,10 @@
+package com.alice.core;
+import com.google.gson.*;
+
+public class RelationshipEffectManager {
+	
+	//This object manages all relationship effects - likely to be a very long file.
+	
+	
+
+}

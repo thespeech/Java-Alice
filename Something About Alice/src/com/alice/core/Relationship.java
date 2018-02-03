@@ -1,0 +1,47 @@
+package com.alice.core;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
+public class Relationship {
+	
+
+	Person relation;
+	CommonRelationship commonRelationship; //The 'public' interactions and events that form the relationship
+	int physicalAttraction; //This is a static number, defined by the relation's physical traits and the person's preferences
+	Queue pastPersonalityTraitsExhibited; //Queue of last 10 traits the relation exhibited in interactions. Only traits the person likes/hates are considered.
+	int personalityAttraction; // Based off the queue; an average of the traits that matter.
+
+	//Temporary modifiers to relationship scores.
+	List<RelationshipEffect> personalRelationshipEffects;
+
+	//Sternberg scale for relationships - all from 0 to 100
+	//Interests and opinion differences affect intimacy.
+	//Personality and physical attraction affect passion only.
+	//Commitment is affected by personality attraction.
+	//Zero commitment does not mean that the person feels no loyalty to the relation - it is implicit in the other two traits.
+	//Commitment amplifies passion/intimacy and can stand on its own.
+	
+	//Intimacy and passion are soft-capped at 50; every time they hit or would exceed it, they stay at 50 and an event is rolled for the person or relation to confess.
+	//Both drop by 3 to 5 points every time this fails. Commitment has no soft cap.
+	
+	int finalCloseness; //This refers to the level of bonding - applies for friendship, knowledge sharing, etc.
+	int finalPassion; //This refers to attraction to the person's personality, mannerisms, and physical features - applies for sex, irrational siding on issues, etc.
+	int finalCommitment; //Implies the level of staying in the relationship simply because of other factors. For example, a member of a club may feel deep commitment towards their leader despite no other factors.	
+	
+
+	Relationship(){
+		personalRelationshipEffects = new ArrayList<RelationshipEffect>();
+	}
+
+	//Closeness:
+	//0-10 relatively neutral
+	//11-20 likable
+	//21-30 good friends
+	//31-40 very close friends
+	//41-50 On the verge of being lovers
+	//51-100 //"Bonus" points - overcapped intimacy.
+	
+
+}
